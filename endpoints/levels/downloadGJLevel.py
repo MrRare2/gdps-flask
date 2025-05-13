@@ -24,6 +24,8 @@ def do(db):
     if int(level_id) < 0:
         daily = get_daily_level_id(db, level_id)
         if not daily: return CommonError.InvalidRequest
+        level_id = daily["levelID"]
+        fea_id = daily["feaID"]
 
     level = get_level_by_id(db, level_id)
 

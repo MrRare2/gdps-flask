@@ -4,7 +4,7 @@ from lib.exploit_patch import Escape
 from lib.ip import IP
 from lib.log import safe_int
 from lib.req import Secret, request_data
-from lib.user import get_account_by_id
+from lib.user import get_account_by_id, get_user_id
 from lib.xor import XORCipher
 from flask import Blueprint, request, render_template_string, redirect, url_for
 from urllib.parse import urlparse
@@ -44,7 +44,7 @@ def reupload_lvl():
         lvl_str = level_dict["4"]
         game_version = level_dict.get("13", "")
         if lvl_str[:2] == "eJ":
-            lvl_str = zlib.decompress(base64.urlsafe_b64decode(lvl_str))
+            lvl_str = zlib.decompress(base64.urlsafe_b64decode(lvl_str), 15 | 32)
             if int(game_version) > 18: game_version = 18
         hostname = IP.get_ip()
         two_player = level_dict.get("31")
@@ -73,21 +73,19 @@ def reupload_lvl():
             # you can change these
             user_id = "15"
             ext_id = "15"
-            if not get_account_by_id(db, ext_id) and get_user_id(db, ext_id) is not None:
-                user_id = create_user(db, "Reupload", ext_id, hostname, True)
         else:
-            info = cursor.fetchone()[0]
+            info = result[0]
             user_id = info["userID"]
             ext_id = info["accountID"]
         level_dict["2"] = Escape.text(level_dict["2"])
         cursor.execute("INSERT INTO levels (levelName, gameVersion, binaryVersion, userName, levelDesc, levelVersion, levelLength, audioTrack, auto, password, original, twoPlayer, songID, objects, coins, requestedStars, extraString, levelString, levelInfo, secret, uploadDate, updateDate, originalReup, userID, extID, unlisted, hostname, starStars, starCoins, starDifficulty, starDemon, starAuto, isLDM, songIDs, sfxIDs, ts) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (
-            level_dict["2"], game_version, "40", "Reupload", level_dict["3"], level_dict["5"], level_dict["13"], level_dict["12"], "0", password, level_dict["1"], two_player, song_id, "0", coins, req_star, extra_string, "", "", "", upload_date, upload_date, level_dict["1"], user_id, ext_id, "0", hostname, star_stars, star_coins, star_diff, star_demon, star_auto, is_ldm, level_dict.get("52", ""), level_dict.get("53", ""), safe_int(level_dict.get("57", time.time()))
+            level_dict["2"], game_version, "40", "Reupload", level_dict["3"], level_dict["5"], level_dict["15"], level_dict["12"], "0", password, level_dict["1"], two_player, song_id, "0", coins, req_star, extra_string, "", "", "", upload_date, upload_date, level_dict["1"], user_id, ext_id, "0", hostname, star_stars, star_coins, star_diff, star_demon, star_auto, is_ldm, level_dict.get("52", ""), level_dict.get("53", ""), safe_int(level_dict.get("57", time.time()))
         ))
         db.commit()
         reup_lvl_id = cursor.lastrowid
         try:
-            with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'levels', str(reup_lvl_id)), 'wb') as f:
-                f.write(lvl_str.encode() if isinstance(lvl_str, str) else lvl_str)
+            with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', 'levels', str(reup_lvl_id)), 'w') as f:
+                f.write(lvl_str.decode() if isinstance(lvl_str, bytes) else lvl_str)
         except IOError:return "Can't write level data"
         return CommonError.Success
     return render_template_string("""

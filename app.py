@@ -187,7 +187,7 @@ def run_https():
     app.run(
         host='127.0.0.1',
         port=5000,
-        ssl_context=('cert.pem', 'key.pem'),
+        ssl_context="adhoc",
         threaded=True
     )
 

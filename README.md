@@ -7,8 +7,9 @@ Supported version of Geometry Dash: 1.0 - 2.2 (i guess)
 (See [the backwards compatibility section of this article](https://github.com/Cvolton/GMDprivateServer/wiki/Deliberate-differences-from-real-GD) for more information)
 
 Required programs to run:
-Python >= 3.6
-Flask >= 3.x
+
+- Python >= 3.6
+- Flask >= 3.x
 
 ### Setup ([PythonAnywhere](https://www.pythonanywhere.com/))
 tutorial soon

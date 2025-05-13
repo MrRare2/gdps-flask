@@ -10,10 +10,10 @@ import time
 
 def do(db):
     person = Security.login_player(db, request)
-    if not person["success"]: return CommonError.InvalidRequest
+    #if not person["success"]: return CommonError.InvalidRequest
 
-    acc_id = person["accountID"]
-    user_id = person["userID"]
+    acc_id = person.get("accountID", -1)
+    user_id = person.get("userID", -1)
     ts = time.time()
 
     ret = user_ret = songs_ret = query_join = ""
@@ -177,7 +177,7 @@ def do(db):
         if gauntlet: ret += "44:1:"
         ret += "1:"+str(level["levelID"])+":2:"+level["levelName"]+":5:"+str(level["levelVersion"])+":6:"+str(level["userID"])+":8:"+str(level.get("difficultyDenominator", 0))+":9:"+str(level["starDifficulty"])+":10:"+str(level["downloads"])+":12:"+str(level["audioTrack"])+":13:"+str(level["gameVersion"])+":14:"+str(level["likes"])+":16:"+str(level.get("dislikes",0))+":17:"+str(level["starDemon"])+":43:"+str(level["starDemonDiff"])+":25:"+str(level["starAuto"])+":18:"+str(level["starStars"])+":19:"+str(level["starFeatured"])+":42:"+str(level["starEpic"])+":45:"+str(level["objects"])+":3:"+level["levelDesc"]+":15:"+str(level["levelLength"])+":28:"+make_time(level['uploadDate'])+(":29:"+make_time(level['updateDate']) if level["updateDate"] else "")+":30:"+str(level["original"])+":31:"+str(level['twoPlayer'])+":37:"+str(level["coins"])+":38:"+str(level["starCoins"])+":39:"+str(level["requestedStars"])+":46:"+str(level["wt"])+":47:"+str(level["wt2"])+":40:"+str(level["isLDM"])+":35:"+str(level["songID"])+"|"
         if level["songID"] != 0:
-            song = return_song_string(level["songID"])
+            song = return_song_string(db, level["songID"])
             if song: songs_ret += song + "~:~"
         user_ret += return_user_string(db, get_user_by_id(db, level["extID"]))+"|"
 

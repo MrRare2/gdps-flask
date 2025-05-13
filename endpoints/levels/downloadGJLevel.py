@@ -12,7 +12,7 @@ import os
 
 def do(db):
     person = Security.login_player(db, request)
-    if not person["success"]: return CommonError.InvalidRequest
+    #if not person["success"]: return CommonError.InvalidRequest
     
     if not request.form.get("levelID", "").isnumeric(): return CommonError.InvalidRequest
 
@@ -42,7 +42,7 @@ def do(db):
         if level_string[:3] == "kS1":
             level_string = Escape.url_base64_encode(gzip.compress(level_string.encode()))
         if game_version > 19:
-            if password != 0: xor_pass = Escape.url_base64_encode(XORCipher.cipher(password, 26364))
+            if password != 0: xor_pass = Escape.url_base64_encode(XORCipher.cipher(str(password), 26364))
             level_desc = Escape.url_base64_encode(level_desc)
 
     ret = "1:"+str(level["levelID"])+":2:"+level["levelName"]+":3:"+str(level_desc)+":4:"+str(level_string)+":5:"+str(level["levelVersion"])+":6:"+str(level["userID"])+":8:"+str(level.get("difficultyDenominator",0))+":9:"+str(level["starDifficulty"])+":10:"+str(level["downloads"])+":11:1:12:"+str(level["audioTrack"])+":13:"+str(level["gameVersion"])+":14:"+str(level["likes"])+":16:"+str(level.get("dislikes", 0))+":17:"+str(level["starDemon"])+":43:"+str(level["starDemonDiff"])+":25:"+str(level["starAuto"])+":18:"+str(level["starStars"])+":19:"+str(level["starFeatured"])+":42:"+str(level["starEpic"])+":45:"+str(level["objects"])+":15:"+str(level["levelLength"])+":30:"+str(level["original"])+":31:"+str(level['twoPlayer'])+":28:"+upload_date+(":29:"+update_date if update_date else '')+":35:"+str(level["songID"])+":36:"+str(level["extraString"])+":37:"+str(level["coins"])+":38:"+str(level["starCoins"])+":39:"+str(level["requestedStars"])+":46:"+str(level["wt"])+":47:"+str(level["wt2"])+":48:"+str(level["settingsString"])+":40:"+str(level["isLDM"])+":27:"+str(xor_pass)+":52:"+str(level["songIDs"])+":53:"+str(level["sfxIDs"])+":57:"+str(level['ts'])

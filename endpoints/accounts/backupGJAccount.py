@@ -76,7 +76,7 @@ def do(db):
 
     save_data = Security.encode_save_file(save_data_decoded) + ';' + save_data_array[1]
     # remove this when that above is properly implemented
-    save_data = Security.encode_save_file(sre.sub(r'(\r\n|\r|\n|( \t)|\t)', '', Security.decode_save_file(save_data_array[0]).decode())) + ";" + save_data_array[1]
+    save_data = Security.encode_save_file(re.sub(r'(\r\n|\r|\n|( \t)|\t)', '', Security.decode_save_file(save_data_array[0]).decode())) + ";" + save_data_array[1]
 
     update_orbs_and_completed_levels(db, account_id, account_orbs, account_levels)
 

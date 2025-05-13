@@ -1,6 +1,6 @@
 # GMDprivateServer
 ## Geometry Dash Private Server Flask ver.
-Basically a Geometry Dash Server Emulator but implemented in Python Flask
+Basically a Geometry Dash Server Emulator but implemented in Python Flask **[WORK IN PROGRESS]**
 
 Supported version of Geometry Dash: 1.0 - 2.2 (i guess)
 
@@ -10,10 +10,8 @@ Required programs to run:
 Python >= 3.6
 Flask >= 3.x
 
-### Setup
-1) Upload the files on a webserver
-2) Import database.sql into a MySQL/MariaDB database
-3) Edit the links in GeometryDash.exe (some are base64 encoded since 2.1, remember that)
+### Setup ([PythonAnywhere](https://www.pythonanywhere.com/))
+tutorial soon
 
 #### Updating the server
 See [README.md in the `_updates`](_updates/README.md)

@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, request
+from dashboard import dashboard
 from endpoints import *
 import conn
 import ssl
@@ -176,6 +177,7 @@ def updateGJUserScore_route():
 app.register_blueprint(main)
 # compat with robtop server endpoints /database/*
 app.register_blueprint(main, url_prefix="/database", name="compat")
+app.register_blueprint(dashboard, url_prefix="/dashboard", name="dashboard")
 
 # do this only on localhost!!!
 def run_http():

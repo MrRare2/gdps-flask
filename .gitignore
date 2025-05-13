@@ -97,3 +97,5 @@ Session.vim
 test*.py
 data/accounts/*
 data/levels/*
+*.key
+*.pem

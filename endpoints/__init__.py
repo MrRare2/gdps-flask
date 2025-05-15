@@ -3,7 +3,7 @@ from .comments import deleteGJAccComment, deleteGJComment, uploadGJAccComment, u
 from .levels import uploadGJLevel, getGJLevels, downloadGJLevel, suggestGJStars
 from .misc import requestUserAccess, getGJSongInfo
 from .profiles import getGJUserInfo
-from .rewards import getGJRewards
+from .rewards import getGJRewards, getGJChallenges
 from .scores import updateGJUserScore
 
 __all__ = [
@@ -30,6 +30,7 @@ __all__ = [
     "getGJUserInfo",
 
     "getGJRewards",
+    "getGJChallenges",
 
     "updateGJUserScore",
 ]

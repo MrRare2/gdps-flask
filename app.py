@@ -174,6 +174,11 @@ def getGJRewards_route():
     db = conn.init()
     return getGJRewards.do(db)
 
+@main.route("/getGJChallenges.php", methods=["POST"])
+def getGJChallenges_route():
+    db = conn.init()
+    return getGJChallenges.do(db)
+
 # scores
 
 @main.route("/updateGJUserScore.php", methods=["POST"])
@@ -197,7 +202,7 @@ def music_handler_route(file):
 def sfx_handler_route(file):
     return redirect("https://geometrydashfiles.b-cdn.net/sfx/"+file)
     #db = conn.init()
-    #return sfx_handler.do(db, file)            
+    #return sfx_handler.do(db, file)
 
 app.register_blueprint(main)
 # compat with robtop server endpoints /database/*

@@ -27,6 +27,8 @@ def do(db):
 
     if not quests: return CommonError.InvalidRequest
 
+    random.shuffle(quests)
+
     quest1 = str(quest_id)+","+str(quests[0]["type"])+","+str(quests[0]["amount"])+","+str(quests[0]["reward"])+","+Escape.dat(quests[0]["name"])
     quest2 = str(quest_id + 1)+","+str(quests[1]["type"])+","+str(quests[1]["amount"])+","+str(quests[1]["reward"])+","+Escape.dat(quests[1]["name"])
     quest3 = str(quest_id + 2)+","+str(quests[2]["type"])+","+str(quests[2]["amount"])+","+str(quests[2]["reward"])+","+Escape.dat(quests[2]["name"])

@@ -27,7 +27,7 @@ def reupload_lvl():
         level_id = Escape.number(request.form.get('level_id', "-1"))
         base = Escape.text(request.form.get("base", "http://www.boomlings.com/database"))
         try: p_url = urlparse(base)
-        except: return "Invslid URL"
+        except: return "Invalid URL"
         db = conn.init()
         code, data = request_data(base, "downloadGJLevel22.php", {"levelID": level_id}, Secret.Common)
         if code != 200 or data == "-1" or data == "": return "Cannot retreive data from server"

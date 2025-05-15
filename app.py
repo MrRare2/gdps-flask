@@ -1,7 +1,9 @@
-from flask import Flask, Blueprint, request
+from flask import Flask, Blueprint, request, redirect
 from dashboard import dashboard
 from endpoints import *
 import conn
+import music_handler
+import sfx_handler
 import ssl
 import threading
 
@@ -149,6 +151,15 @@ def requestUserAccess_route():
     db = conn.init()
     return requestUserAccess.do(db)
 
+@main.route("/getGJSongInfo.php", methods=["POST"])
+def getGJSongInfo_route():
+    db = conn.init()
+    return getGJSongInfo.do(db)
+
+@main.route("/getCustomContentURL.php", methods=["POST"])
+def getCustomContentURL_route():
+    return request.scheme+"://"+request.environ.get("SERVER_NAME", "localhost")+":"+request.environ.get("SERVER_PORT", "5000")   
+
 # profiles
 
 @main.route("/getGJUserInfo20.php", methods=["POST"])
@@ -173,6 +184,20 @@ def getGJRewards_route():
 def updateGJUserScore_route():
     db = conn.init()
     return updateGJUserScore.do(db)
+
+# music / sfx handler
+
+@main.route("/music/<file>", methods=["GET"])
+def music_handler_route(file):
+    return redirect("https://geometrydashfiles.b-cdn.net/music/"+file)
+    #db = conn.init()
+    #return music_handler.do(db, file)
+
+@main.route("/sfx/<file>", methods=["GET"])
+def sfx_handler_route(file):
+    return redirect("https://geometrydashfiles.b-cdn.net/sfx/"+file)
+    #db = conn.init()
+    #return sfx_handler.do(db, file)            
 
 app.register_blueprint(main)
 # compat with robtop server endpoints /database/*

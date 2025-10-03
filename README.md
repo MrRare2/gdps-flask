@@ -1,3 +1,6 @@
+> [!WARNING]
+> This implementation is **extremely** buggy and not recommended for normal use. If you like to contribute to this project, feel free to make a fork (and maybe pull request!)
+
 # GMDprivateServer
 ## Geometry Dash Private Server Flask ver.
 Basically a Geometry Dash Server Emulator but implemented in Python Flask **[WORK IN PROGRESS]**

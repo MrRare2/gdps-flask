@@ -179,6 +179,11 @@ def getGJChallenges_route():
     db = conn.init()
     return getGJChallenges.do(db)
 
+@app.route("/getGJSecretReward.php", methods=["POST"])
+def getGJSecretReward_route():
+    db = conn.init()
+    return getGJSecretReward.do(db)
+
 # scores
 
 @main.route("/updateGJUserScore.php", methods=["POST"])

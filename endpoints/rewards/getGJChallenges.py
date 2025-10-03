@@ -25,7 +25,7 @@ def do(db):
     cursor.execute('SELECT * FROM quests')
     quests = cursor.fetchall()
 
-    if not quests: return CommonError.InvalidRequest
+    if not quests and len(quests) > 3: return CommonError.InvalidRequest
 
     random.shuffle(quests)
 

@@ -1,8 +1,9 @@
 from .exploit_patch import Escape
-from .enums import ModeratorAction
-from .log import log_mod
+from .enums import Action, ModeratorAction
+from .log import log, log_mod
 from .req import request_data, Secret
 from .song_servers import libraries
+import base64
 import json
 import os
 import random
@@ -224,7 +225,7 @@ def update_libraries(db, token, expires, main_server_time, type=0):
     if old_version < main_server_time or updated_lib: generate_dat_file(db, sorted(times, reverse=True)[0], type)
 
 def add_dl_to_level(db, person, level_id):
-    if person["accountID"] == 0 or person["userID"] == 0: return False
+    if person.get("accountID", -1) == 0 or person.get("userID", -1) == 0: return False
     cursor = db.cursor()
     cursor.execute("UPDATE levels SET downloads = downloads + 1 WHERE levelID = %s AND isDeleted = 0", (level_id,))
     db.commit()
@@ -291,3 +292,26 @@ def rate_level(db, level_id, person, difficulty, stars, verify_coins, featured_v
 
     log_mod(db, person, ModeratorAction.LevelRate, real_difficulty["difficulty"], stars, level_id, featured_value, star_coins)
     return real_difficulty["name"]
+
+def get_vault_code(db, code):
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM vaultcodes WHERE code = %s", (base64.b64encode(code.encode()).decode(),))
+    return cursor.fetchone()
+
+def is_vault_code_used(db, person, reward_id):
+    if person["accountID"] == 0 or person["userID"] == 0: return True
+
+    cursor = db.cursor()
+    cursor.execute("SELECT count(*) FROM actions WHERE type = 38 AND value = %s AND account = %s", (reward_id, person["accountID"]))
+    return cursor.fetchone()[0] > 0
+
+def use_vault_code(db, person, vault_code, code):
+    if person["accountID"] == 0 or person["userID"] == 0: return True
+
+    if vault_code["uses"] == 0: return False
+
+    cursor = db.cursor()
+    cursor.execute("UPDATE vaultcodes SET uses = uses - 1 WHERE rewardID = %s", (vault_code["rewardID"],))
+    db.commit()
+
+    log(db, person["accountID"], person["ID"], Action.VaultCodeUse, vault_code["rewardID"], vault_code["rewards"], code)
